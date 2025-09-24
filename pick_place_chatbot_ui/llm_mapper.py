@@ -1,4 +1,4 @@
-#llm_mapper.py
+# llm_mapper.py
 import re
 import difflib
 import subprocess
@@ -47,7 +47,7 @@ def find_best_label(user_text: str) -> str | None:
 
 
 def extract_labels(user_text: str) -> list[str]:
-    """Find all valid labels mentioned in user text."""
+    """Find all valid labels explicitly mentioned in user text (no fuzzy)."""
     labels = []
     text = user_text.lower()
 
@@ -55,11 +55,6 @@ def extract_labels(user_text: str) -> list[str]:
         pattern = label.replace("_", "[ _]")
         if re.search(rf"\b{pattern}\b", text):
             labels.append(label)
-
-    if not labels:
-        best = find_best_label(text)
-        if best:
-            labels.append(best)
 
     return labels
 
@@ -76,7 +71,6 @@ def llm_chat_or_pick(user_text: str, visible_objects: set[str] | None = None) ->
     if re.search(r"\brevel (items|assets|objects)\b", text):
         revel_labels = ["measuring_tape", "chisel", "knife", "allen_key"]
 
-        # If visible_objects is provided, filter the revel labels accordingly
         if visible_objects:
             revel_labels = [l for l in revel_labels if l in visible_objects]
             if not revel_labels:
@@ -131,6 +125,7 @@ def llm_chat_or_pick(user_text: str, visible_objects: set[str] | None = None) ->
             return {"type": "ask_box", "labels": labels,
                     "reply": f"Okay, {', '.join(l.replace('_',' ') for l in labels)} selected ✅. In which box do you want to drop them (1 or 2)?"}
 
+        # Fallback to fuzzy match if no exact label
         best_match = find_best_label(text)
         if best_match:
             _last_suggestion = best_match
@@ -150,4 +145,3 @@ Respond only with text (no JSON needed).
     except Exception:
         reply = "Hello! How can I help you?"
     return {"type": "chat", "reply": reply}
-

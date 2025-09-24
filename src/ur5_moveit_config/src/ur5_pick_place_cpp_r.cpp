@@ -307,13 +307,13 @@ bool executePickAndPlace(moveit::planning_interface::MoveGroupInterface &move_gr
     if (!rotateGripperYaw(move_group, yaw)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
-    if (!moveDownZ(move_group, 0.26)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
+    if (!moveDownZ(move_group, 0.24)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
     if (!closeGripper(gripper_group)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
-    if (!moveUpZ(move_group, 0.26)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
+    if (!moveUpZ(move_group, 0.24)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
     double box_x, box_y;

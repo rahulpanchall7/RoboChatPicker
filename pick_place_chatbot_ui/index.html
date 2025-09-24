@@ -6,8 +6,9 @@
   <title>Robot Arm Chatbot</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: #1e1e1e; /* Dark background */
+      color: #e0e0e0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,12 +22,12 @@
       width: 100%;
       max-width: 400px;
       height: 600px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      background: #2a2a2a; /* Dark panel */
+      border-radius: 6px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      border: 1px solid #333;
     }
 
     .messages {
@@ -36,27 +37,27 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      background-color: #f9f9f9;
+      background-color: #252525; /* Slightly darker area */
     }
 
     .message {
       padding: 10px 15px;
-      border-radius: 20px;
+      border-radius: 4px;
       max-width: 75%;
       word-wrap: break-word;
-      position: relative;
+      font-size: 14px;
     }
 
     .user {
       align-self: flex-end;
-      background-color: #0084ff;
-      color: #fff;
+      background-color: #76B900; /* NVIDIA green */
+      color: #1e1e1e; /* Dark text on green */
     }
 
     .bot {
       align-self: flex-start;
-      background-color: #e5e5ea;
-      color: #000;
+      background-color: #333; /* Bot messages in grey */
+      color: #e0e0e0;
     }
 
     .loading {
@@ -66,8 +67,8 @@
     }
 
     .spinner {
-      border: 3px solid #ccc;
-      border-top: 3px solid #0084ff;
+      border: 3px solid #555;
+      border-top: 3px solid #76B900; /* NVIDIA green */
       border-radius: 50%;
       width: 16px;
       height: 16px;
@@ -81,29 +82,37 @@
 
     .input-container {
       display: flex;
-      border-top: 1px solid #ccc;
-      background-color: #fff;
+      border-top: 1px solid #3a3a3a;
+      background-color: #2a2a2a;
     }
 
     input {
       flex: 1;
       border: none;
-      padding: 10px 15px;
-      font-size: 16px;
+      padding: 12px 15px;
+      font-size: 15px;
+      background: #1e1e1e; /* Input in darker grey */
+      color: #e0e0e0;
       outline: none;
+    }
+
+    input::placeholder {
+      color: #777;
     }
 
     button {
       border: none;
-      background-color: #0084ff;
-      color: white;
-      padding: 10px 15px;
+      background-color: #76B900; /* NVIDIA green */
+      color: #1e1e1e;
+      padding: 12px 18px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
+      font-weight: bold;
+      transition: background 0.2s ease;
     }
 
     button:hover {
-      background-color: #006bbf;
+      background-color: #5a8a00; /* Darker green hover */
     }
 
     .messages::-webkit-scrollbar {
@@ -111,7 +120,7 @@
     }
 
     .messages::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.2);
+      background-color: #444;
       border-radius: 3px;
     }
   </style>
@@ -129,7 +138,7 @@
 
   <script>
     const messagesDiv = document.getElementById("messages");
-    let loadingMessage = null; // track spinner message DOM element
+    let loadingMessage = null;
 
     function addMessage(text, sender) {
       const msg = document.createElement("div");
@@ -141,11 +150,9 @@
     }
 
     function addLoadingMessage(text = "Working...") {
-      // If there's already a loading message, remove it first
       if (loadingMessage) {
         removeLoadingMessage();
       }
-
       const msg = document.createElement("div");
       msg.classList.add("message", "bot", "loading");
 
@@ -168,9 +175,7 @@
       if (!loadingMessage) return;
 
       if (finalText) {
-        // replace spinner block with finalText (keep message & bot classes)
         loadingMessage.classList.remove("loading");
-        // Replace innerHTML with plain text content (no spinner)
         loadingMessage.innerHTML = finalText;
       } else {
         messagesDiv.removeChild(loadingMessage);
@@ -196,7 +201,6 @@
         const data = await res.json();
 
         if (data.reply && data.reply.includes("⏳")) {
-          // show spinner instead of static ⏳ text
           const label = data.reply.replace("⏳", "").trim();
           addLoadingMessage(label);
         } else if (data.reply) {
@@ -208,12 +212,10 @@
       }
     }
 
-    // Enter key sends message
     document.getElementById("userInput").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
 
-    // --- WebSocket connection for live updates ---
     let wsProto = (window.location.protocol === "https:") ? "wss://" : "ws://";
     let ws = new WebSocket(wsProto + window.location.host + "/ws");
 
@@ -222,16 +224,13 @@
         let data = JSON.parse(event.data);
         if (!data.reply) return;
 
-        // If reply contains the spinner marker, show spinner (for subsequent queued items)
         if (data.reply.includes("⏳")) {
           const label = data.reply.replace("⏳", "").trim();
           addLoadingMessage(label);
           return;
         }
 
-        // Otherwise it's a normal message (e.g. "red cube dropped in box 1 ✅")
         if (loadingMessage) {
-          // replace spinner with final success text
           removeLoadingMessage(data.reply);
         } else {
           addMessage(data.reply, "bot");

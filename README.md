@@ -103,9 +103,10 @@ ros2 launch ur5_moveit_config demo.launch.py
 
 ##
 ```bash
+cd ~/Isaac_Project/pickPlaceChatMoveitBot_ws/
 source /opt/ros/humble/setup.bash
 source install/setup.bash  
-ros2 run ur5_moveit_config ur5_pick_place_cpp_s 
+ros2 run ur5_moveit_config ur5_pick_place_cpp_r 
 ```
 
 ```bash
