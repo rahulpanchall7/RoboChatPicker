@@ -29,7 +29,6 @@ This allows users to **command the robot in plain English**, enabling smart and 
 ## 📦 Dependencies  
 - **ROS2 Humble**  
 - **MoveIt** (`ros-humble-moveit-py`, `moveit` package)  
-- **Franka ROS2 packages**  
 - **UR5 MoveIt config**  
 - **Ultralytics (YOLOv8)**  
 - **ROS2 Control + Controllers**  
