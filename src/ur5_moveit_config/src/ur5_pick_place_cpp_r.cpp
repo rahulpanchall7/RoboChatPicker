@@ -307,13 +307,13 @@ bool executePickAndPlace(moveit::planning_interface::MoveGroupInterface &move_gr
     if (!rotateGripperYaw(move_group, yaw)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
-    if (!moveDownZ(move_group, 0.24)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
+    if (!moveDownZ(move_group, 0.255)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
     if (!closeGripper(gripper_group)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
-    if (!moveUpZ(move_group, 0.24)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
+    if (!moveUpZ(move_group, 0.255)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
     double box_x, box_y;
@@ -330,13 +330,13 @@ bool executePickAndPlace(moveit::planning_interface::MoveGroupInterface &move_gr
     if (!moveToWorldXY(move_group, box_x, box_y)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));   
 
-    if (!moveDownZ(move_group, 0.24)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
+    if (!moveDownZ(move_group, 0.255)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
     if (!openGripper(gripper_group)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
-    if (!moveUpZ(move_group, 0.24)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
+    if (!moveUpZ(move_group, 0.255)) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
     rclcpp::sleep_for(std::chrono::seconds(delay));
 
     if (!moveToNamedPose(move_group, "arm_ready")) { current_status = "ERROR"; publishStatus(status_pub, current_status); return false; }
@@ -453,9 +453,17 @@ int main(int argc, char **argv)
     {
         bool run_motion = false;
         double x, y, yaw, box;
-        long int delay = 1;  // seconds
+        long int delay = 2;  // seconds
 
-        // Original subscriber logic
+        // // ----------------- FOR DEBUG: Hardcoded target -----------------
+        // x = 0.355;        // meters
+        // y = 0.176;        // meters
+        // yaw = 0.0;       // radians (45 deg)
+        // box = 1;          // box number (1 or 2)
+        // run_motion = true;        
+        // // ----------------------------------------------------------
+
+        //Original subscriber logic
         {
             std::lock_guard<std::mutex> lock(mtx);
             if (new_target_available)
@@ -478,6 +486,8 @@ int main(int argc, char **argv)
                 publishStatus(status_pub, current_status);
                 break;
             }
+
+            // break;
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
