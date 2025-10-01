@@ -40,37 +40,43 @@ This allows users to **command the robot in plain English**, enabling smart and 
 
 ---
 
-## ⚙️ Setup
-
-1. Create a new **Conda environment** with Python 3.10  
-2. Install dependencies from `requirements.txt`:  
-   ```bash
-   pip install -r requirements.txt
-   ```
-
----
-
 ## 🤖 Running the Demo  
 
-1. Open **Isaac Sim**  
-2. Load the simulation file: `SPARC.usd`  
-3. Start the simulation  
-4. Clone this repository:  
-   ```bash
+1. Clone the directory and navigate into the project folder:
+```bash
    git clone https://github.com/sahilrajpurkar03/nlp-pnp-robotic-arm.git
-   ```
-5. Activate the Conda environment  
-6. Navigate into the project folder:  
-   ```bash
-   cd nlp-pnp-robotic-arm
-   ```
-7. Launch the main script:  
-   ```bash
-   ./main_launch.sh
-   ```
+   cd ~/nlp-pnp-robotic-arm
+   source /opt/ros/humble/setup.bash
+   colcon build && source install/setup.bash
+```
 
-This will start the **chatbot interface**. You can then send natural language commands like:  
-👉 *"Pick the red cube"*  
+3. Create a new conda environment named **ros2_humble_py310** with Python 3.10 
+
+2. Install dependencies from `requirements.txt` inside the environment, as it is required for the Chatbot:  
+```bash
+   pip install -r requirements.txt
+```
+4. Open Isaac Sim.
+
+5. Load the simulation file: `SPARC.usd`
+
+6. Play the simulation
+
+7. Launch the script to open RVIZ, MoveIt, and the control script for the robot:
+```bash
+   chmod +x main_launch.sh
+   ./main_launch.sh
+```
+> **Note:** Bring the Robot to the `arm_ready` pose through the RVIZ GUI
+
+8. To open the Chatbot (in new Terminal window)
+```bash
+   cd ~/Team7_SPARC
+   conda activate ros2_humble_py310
+   ./pick_place_chatbot_ui/launch.sh
+```
+
+9. Start typing commands in the chatbot and see the magic ✨🤖🚀
 
 SPARC will handle the rest automatically 🚀  
 
@@ -78,15 +84,18 @@ SPARC will handle the rest automatically 🚀
 
 ## 🛠️ Debugging  
 
-### Panda Arm + Motion Planning  
+## RVIZ + MoveIt Launch
 ```bash
-ros2 launch panda_moveit_config demo.launch.py
-ros2 run panda_moveit_config move_arm_to_xyz 0.0 0.0 0.0
+cd ~/nlp-pnp-robotic-arm
+source /opt/ros/humble/setup.bash
+colcon build
+source install/setup.bash  
+ros2 launch ur5_moveit_config demo.launch.py 
 ```
 
 ### UR5 Arm Demo  
 ```bash
-cd ~/Isaac_Project/pickPlaceChatMoveitBot_ws/
+cd ~/nlp-pnp-robotic-arm
 source /opt/ros/humble/setup.bash
 colcon build
 source install/setup.bash
@@ -102,7 +111,7 @@ ros2 run yolov8obb_object_detection yolov8_obb_subscriber
 
 ### Chatbot Control  
 ```bash
-cd ~/Isaac_Project/pickPlaceChatMoveitBot_ws/
+cd ~/nlp-pnp-robotic-arm
 conda activate ros2_humble_py310
 source /opt/ros/humble/setup.bash
 source install/setup.bash
@@ -120,7 +129,3 @@ SPARC demonstrates **seamless integration of AI and Robotics**, showcasing how n
 
 ---
 
-## 📹 Demo Video  
-👉 [Add your demo video link here]  
-
----
