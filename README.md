@@ -1,5 +1,8 @@
 # SPARC 🤖  
-![ROS2 Humble](https://img.shields.io/badge/ROS2-Humble-blue)  ![Python 3.10](https://img.shields.io/badge/Python-3.10-green)  ![MoveIt](https://img.shields.io/badge/MoveIt-Enabled-orange)  ![YOLOv8](https://img.shields.io/badge/YOLOv8-OBB-red)  
+[![ROS2 Humble](https://img.shields.io/badge/ROS2-Humble-blue)](https://docs.ros.org/en/humble/)
+[![Python 3.10](https://img.shields.io/badge/Python-3.10-green)](https://www.python.org/downloads/release/python-3100/)
+[![MoveIt](https://img.shields.io/badge/MoveIt-Enabled-orange)](https://moveit.ros.org/)
+[![YOLOv8](https://img.shields.io/badge/YOLOv8-OBB-red)](https://docs.ultralytics.com/)
 
 **Smart Pick-n-Place with AI Robotics and Chatbot**  
 
